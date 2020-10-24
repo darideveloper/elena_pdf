@@ -1,6 +1,10 @@
 # merge_pdf
 ## Description
-Merge pdf files, in order, from specific folder. 
+Merge pdf files, in order, from specific folder.
+
+# Install modules
+**$ pip install PyPDF2**
+
 ## How to use
 Run de program by terminal. 
 
@@ -8,6 +12,7 @@ Write the path of the .pdf files, and opcional the destination folder to the mer
 If you only type the pdfs file path, the merge file will make in the parent folder.
 The program auto complite the name file and use a generic name if you lost write it. 
 If destination file already exist, a warning is displayed
+
 ### Use example
 **$ python3 main.py usr/pdfsFolder** # Merge pdf files from the folder, and generate the mergeFile.pdf in parent folder (usr)
 
@@ -21,6 +26,9 @@ If destination file already exist, a warning is displayed
 # merge_pdf (ESPAÑOL)
 ## Descripción
 Fusionar archivos pdf, en orden desde una carpeta específica. 
+
+# Instalar módulos
+**$ pip install PyPDF2**
 
 ## Como usar
 Ejecute el programa desde terminal 
