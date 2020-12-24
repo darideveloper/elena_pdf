@@ -1,31 +1,45 @@
-# merge_pdf
-## Description
-By terminal **merge pdf files**, in order, from specific folder.
+# Merge_pdf
+Merge all pdfs in the current folder, or specific list of files, by name, into a single pdf file
 
-# Install modules
+# Install 
 ```bash
-$ pip install PyPDF2
+
 ```
 
 ## How to use
-Run de program by **terminal.** 
+``` python
+# Import module
+from merge_pdf import merge
 
-Write the **path of the .pdf files**, and opcional the **destination folder** to the merge files.
-If you **only type the pdfs file path**, the merge file will make in the **parent folder.**
-The program **auto complite the name** of destiny file **file** and use a **generic name** if you lost write it. 
-If **destination file already exist**, a **warning** is displayed
+# Path of the output pdf file
+output_file = "c:\\output\\merged_files.pdf"
 
-### Use example
-```bash
-# Merge pdf files from the folder, and generate the mergeFile.pdf in parent folder (usr)
-$ python3 main.py usr/pdfsFolder 
+# Folder of the output file
+output_file_folder = "c:\\output"
 
-# Merge pdf files from the folder, and generate the mergeFile.pdf in specific folder
-$ python3 main.py usr/pdfsFolder usr/pdfsMergeFolder 
+# Folder within have pdf files
+folder_files_pdf = "c:\\pdf_files"
 
-# Merge pdf files from the folder, and generate the mergeFile.pdf in specific folder with other name (myfile.pdf)
-$ python3 main.py usr/pdfsFolder usr/pdfsMergeFolder/myfile.pdf
+# List of specific pdf files
+files_list = [
+    "c:\\pdf_files\\01.pdf",
+    "c:\\pdf_files\\02.pdf",
+    "c:\\pdf_files\\03.pdf"
+]
 
-# Merge pdf files from the folder, and generate the mergeFile.pdf in specific folder with other name (myfile (it workd to without extension))
-$ python3 main.py usr/pdfsFolder usr/pdfsMergeFolder/myfile 
+# Merge the files inside of specific folder and save in output file
+merge.Merge (output_file).merge_folder (folder_files_pdf)
+
+# Use a folder to generate the output file with the default name in this folder
+merge.Merge (output_file_folder).merge_folder (folder_files_pdf)
+
+# Merge specific list of files
+merge.Merge (output_file, replace= True).merge_file_list (files_list)
+
+# Merge files and allow replace existing file output
+merge.Merge (output_file, replace=True).merge_folder (folder_files_pdf)
+
+# Merge files and print the status of the program
+merge.Merge (output_file, debug=True).merge_folder (folder_files_pdf)
+
 ```

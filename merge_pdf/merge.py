@@ -5,7 +5,8 @@ import PyPDF2, os, sys, logging
 
 class Merge (): 
     """
-    Merge all pdfs in the current folder, by name, into a single pdf file
+    Merge all pdfs in the current folder, or specific list of files, 
+    by name, into a single pdf file
     """
 
     def __init__ (self, file_output = "", replace = False, debug = False):
@@ -21,7 +22,7 @@ class Merge ():
         self.pdfFiles = []
         self.fileOutput = file_output
         self.replace = replace
-        
+
         self.__verify_outputh_file()
 
     def merge_file_list (self, file_list): 
