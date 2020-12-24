@@ -1,9 +1,9 @@
-# Merge_pdf
-Merge all pdfs in the current folder, or specific list of files, by name, into a single pdf file
+# Merge pdf
+Merge by name, all pdfs in the current folder, or specific list of files, into a single pdf file
 
 # Install 
 ```bash
-
+$ pip install merge-pdf
 ```
 
 ## How to use
