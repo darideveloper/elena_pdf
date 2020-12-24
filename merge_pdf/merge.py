@@ -1,74 +1,112 @@
 #! python3
 # Combines all the pafs in the current working directory into a single pdf
 
-import PyPDF2, os, sys
+import PyPDF2, os, sys, logging
 
-#Get all pdfs names
-pdfFiles = []
-dirPath = ' '
-fileOutput = ' '
+class Merge (): 
+    """
+    Merge all pdfs in the current folder, by name, into a single pdf file
+    """
 
-# Red the terminal
-helpMenssage = 'Write the path of the .pdf files, and opcional the destination '
-helpMenssage += 'folder to the merge file, \n(example: main.py "user/myPdfsFolder" "user/myFiles/mergeFiles.pdf").'
-helpMenssage += '\nIf you only type the pdfs file path, the merge file will make in the parent folder \n(example: main.py "user/myPdfsFolder")'
-if len(sys.argv) == 1: 
-    print ('The program need more arguments. \n' + helpMenssage)
-    sys.exit()
-elif len(sys.argv) == 2:
-    dirPath = sys.argv[1]
-    fileOutput = os.path.join(os.path.dirname (dirPath), "mergeFiles.pdf")
-elif len(sys.argv) == 3:  
-    dirPath = sys.argv[1]
-    fileOutput = sys.argv[2]
-else: 
-    print ('To much argument. \n' + helpMenssage)
-    sys.exit()
+    def __init__ (self, file_output = "", replace = False, debug = False):
+        """
+        Constructor of class. Generate empty list of files an get dir path and file ouput
+        """
 
-if not os.path.isdir (dirPath): 
-    print ("This folder dosent exist.")
-    sys.exit()
+        # Debug configuration
+        logging.basicConfig( level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s' )
+        if not debug: 
+            logging.disable()
 
-#Check folder
-for filename in os.listdir(dirPath):
-    if filename.endswith('.pdf'): 
-        pdfFiles.append(os.path.join(dirPath, filename))
+        self.pdfFiles = []
+        self.fileOutput = file_output
+        self.replace = replace
+        
+        self.__verify_outputh_file()
 
-# Check file and request to replice file
-if os.path.isdir (fileOutput): 
-    fileOutput = os.path.join(fileOutput, 'mergeFiles.pdf')
-else: 
-    if not fileOutput.endswith('.pdf'): 
-        fileOutput += '.pdf'
+    def merge_file_list (self, file_list): 
+        """
+        Merge a specific list of pdf files inside the output file
+        """
 
-if os.path.isfile(fileOutput):
-    repleace = input ("The file %s already exist. Do you want to replace it (y/n)?" % (fileOutput))
-    if repleace.lower()[0] != 'y': 
-        print ("Program finished.")
-        sys.exit()
+        # verify attribs
+        if type (file_list) != list: 
+            raise AttributeError (file_list)
 
-# Order files
-pdfFiles.sort(key = str.lower)
+        self.pdfFiles = file_list
 
-pdfWriter = PyPDF2.PdfFileWriter()
+        # Short files
+        self.pdfFiles.sort(key = str.lower)
 
-# loop through all the pdf files
-if pdfFiles: 
-    for currentFile in pdfFiles: 
-        pdfFileObj = open (currentFile, 'rb')
-        pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-        # loop through all the pages (except the first) and add them
-        print ("Merging %s " % (currentFile))
-        if pdfReader.numPages: 
-            for pageNum in range (0, pdfReader.numPages): 
-                pageObj = pdfReader.getPage(pageNum)
-                pdfWriter.addPage (pageObj)            
+        self.__make_file()
     
-    # Save the resulting pdf to a file
-    pdfOutput = open (os.path.join(os.path.dirname(dirPath), fileOutput), 'wb')
-    pdfWriter.write(pdfOutput)
-    pdfOutput.close()
+    def merge_folder (self, folder):
+        """
+        Merge all files from a specific folder and save inside the output file
+        """
 
-    print ('Done. Pages are now in %s file' % (os.path.join(dirPath, fileOutput)))
-else: 
-    print ("Dosent exist pdf files in this folder.")
+        # Verify is folder exist
+        if not os.path.isdir (folder): 
+            raise FileNotFoundError(folder)
+        
+        # Get files
+        for filename in os.listdir(folder):
+            if filename.endswith('.pdf'): 
+                self.pdfFiles.append(os.path.join(folder, filename))
+        
+        # Order files
+        self.pdfFiles.sort(key = str.lower)
+
+        self.__make_file()
+
+    def __verify_outputh_file (self): 
+        """
+        Verify the name of the output file and if the file will be replace or not
+        """
+
+        # verify path and make file name
+        if os.path.isdir (self.fileOutput): 
+            self.fileOutput = os.path.join(self.fileOutput, 'mergeFiles.pdf')
+        else: 
+            if not self.fileOutput.endswith('.pdf'): 
+                self.fileOutput += '.pdf'
+
+        # Verify replca outputh file
+        if os.path.isfile(self.fileOutput):
+            if self.replace: 
+                logging.debug ("Replacing file")
+            else: 
+                self.fileOutput = 'File "{}" already exist'.format (self.fileOutput)
+                raise ValueError(self.fileOutput)
+
+    def __make_file (self):
+        """
+        Make pdf output file with each page of the file list 
+        """
+
+        pdfWriter = PyPDF2.PdfFileWriter()
+
+        # loop through all the pdf files
+        if self.pdfFiles: 
+            for currentFile in self.pdfFiles: 
+                pdfFileObj = open (currentFile, 'rb')
+                pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+                # loop through all the pages (except the first) and add them
+                logging.debug ("Merging {}... ".format (currentFile))
+                if pdfReader.numPages: 
+                    for pageNum in range (0, pdfReader.numPages): 
+                        pageObj = pdfReader.getPage(pageNum)
+                        pdfWriter.addPage (pageObj)            
+            
+            # Save the resulting pdf to a file
+            pdfOutput = open (self.fileOutput, 'wb')
+            pdfWriter.write(pdfOutput)
+            pdfOutput.close()
+
+            logging.debug ('Done. Pages are now in {} file'.format (os.path.basename(self.fileOutput)))
+        else: 
+            logging.debug ("Dosent exist pdf files in this folder.")
+
+
+
+
