@@ -9,7 +9,7 @@ with open(os.path.join(this_directory, 'README.md')) as f:
 
 setup (
 	name = "merge_pdf",
-	version = "1.0.0", 
+	version = "1.0.1", 
 	description = "Merge by name, all pdfs in the current folder, or specific list of files, into a single pdf file",
 	long_description = long_description,
 	long_description_content_type = "text/markdown",
@@ -23,6 +23,6 @@ setup (
 		"Source": "https://github.com/DariHernandez/merge_pdf"
 		},
 	packages = find_packages(include=["merge_pdf", "merge_pdf.*"]),
-	install_requires = ["pyperclip"],
+	install_requires = ["pyperclip", "PyPDF2"],
 	python_requires = ">=3.7"
 )
