@@ -42,7 +42,7 @@ class PdfManager ():
             self.input_files = []
             self.input_files.append (file)
 
-        # Loop for each file
+        # Loop for each file 
         for file in self.input_files: 
             
             # No found error
@@ -94,6 +94,25 @@ class PdfManager ():
             else: 
                 message = 'File "{}" already exist'.format (self.output_file)
                 raise ValueError(message)
+    
+    def __verify_outputh_folder (self, folder): 
+        """
+        Verify if output folder already exist. 
+        If folder dosent exist, make it
+        """
+
+        # Verify if is folder
+        if os.path.isfile (folder): 
+            message = 'Error output folder. ({})\nThe output folder need to be a folder, not a file.'.format (folder)
+            raise ValueError(message)
+        elif folder.strip() == "":
+            message = 'The functions need a destination folder.'
+            raise ValueError(message)
+        elif not os.path.isdir (folder): 
+            message = 'Output folder ({}), doesn\'t exist.'.format (folder)
+            raise FileNotFoundError (message)
+
+
 
     def merge (self, merged_file): 
         """
@@ -130,12 +149,14 @@ class PdfManager ():
         else: 
             logging.debug ("List of files empty.")
 
-    def split (self, split_base_name = " - split -"): 
+    def split (self, output_folder, split_base_name = "-split-"): 
         """
-        Merge a specific list of pdf files inside the output file
+        Split a specific list of pdf files inside specific folder
         """
 
         self.__verify_extension_input_files (pdf=True, function_name = "merge")
+
+        self.__verify_outputh_folder(output_folder)
         
 
         # loop through all the pdf files
@@ -144,7 +165,7 @@ class PdfManager ():
                 pdfFileObj = open (currentFile, 'rb')
                 pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
                 
-                logging.debug ("Merging {}... ".format (currentFile))
+                logging.debug ("Dividing {}... ".format (currentFile))
 
                 # loop through all the pages (except the first) and add them
                 if pdfReader.numPages: 
@@ -155,19 +176,29 @@ class PdfManager ():
                         pageObj = pdfReader.getPage(pageNum)
                         pdfWriter.addPage (pageObj)            
 
+                        # Create the output file path
+                        parent_file_name = os.path.basename (currentFile)
+                        file_name = parent_file_name[:-4] + "{}{}.{}".format (split_base_name, str(pageNum + 1), "pdf")
+                        file_path = os.path.join (output_folder, file_name)
+
+                        # Verify if file exist
+                        self.__verify_outputh_file (file_path, "", ".pdf") 
+
                         # Save file
-                        file_name = currentFile[:-4] + "{} {}.{}".format (split_base_name, str(pageNum + 1), ".pdf")
-                        self.__verify_outputh_file (file_name, "", ".pdf") 
                         pdfOutput = open (self.output_file, 'wb')
                         pdfWriter.write(pdfOutput)
                         pdfOutput.close()
 
-                        logging.debug ('Done. File "{}" generated.'.format (file_name))
+                        logging.debug ('Done. File "{}" generated.'.format (file_path))
                 else: 
                     logging.debug ('File "{}" has not pages.'.format (file_name))
 
         else: 
             logging.debug ("List of files empty.")
+    
+    def pdf_jpg (self):
+        pass
+
 
 
 
