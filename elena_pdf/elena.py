@@ -78,14 +78,21 @@ class PdfManager ():
         Verify the name of the output file and if the file will be replace or not
         """
 
+
         # verify path and make file name
         if os.path.isdir (file): 
             self.output_file = os.path.join(file, default_name + extension)
+        elif file.endswith(".pdf"):
+            self.output_file = file
         else:
-            if file.endswith(extension): 
-                self.output_file = file
-            else: 
+            parent_path = os.path.dirname(file) 
+            if os.path.isdir (parent_path): 
                 self.output_file = file + extension
+            else: 
+                message = 'Parent folder "{}" doesn\'t exist'.format (parent_path)
+                raise ValueError(message)
+
+
 
         # Verify replace outputh file
         if os.path.isfile (self.output_file):
@@ -145,7 +152,7 @@ class PdfManager ():
             pdfWriter.write(pdfOutput)
             pdfOutput.close()
 
-            logging.debug ('Done. Pages are now in "{}".'.format (os.path.basename(self.output_file)))
+            logging.debug ('Done. Pages are now in "{}".'.format (self.output_file))
         else: 
             logging.debug ("List of files empty.")
 
