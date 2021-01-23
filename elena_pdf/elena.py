@@ -1,6 +1,7 @@
 #! python3
 
-import PyPDF2, os, sys, logging, pdf2image
+import PyPDF2, os, sys, logging, pdf2image, img2pdf, send2trash
+from PIL import Image 
 
 class PdfManager (): 
     """
@@ -17,7 +18,7 @@ class PdfManager ():
         if not debug: 
             logging.disable()
 
-
+        self.debug = debug
         self.pdfFiles = []
         self.imgFiles = []
         self.input_files = input_files
@@ -58,7 +59,7 @@ class PdfManager ():
         if pdf: 
             list_extensions = ["pdf"]
         else: 
-            list_extensions = self.list_extensions.remove ("pdf")
+            list_extensions = ["jpg"]
 
 
         # Loop for each file
@@ -73,7 +74,7 @@ class PdfManager ():
                     \nFunction {} doesn't support the extension: '{}'" \
                     .format (file, function_name, extension))
 
-    def __verify_outputh_file (self, file, default_name, extension): 
+    def __verify_output_file (self, file, default_name, extension): 
         """
         Verify the name of the output file and if the file will be replace or not
         """
@@ -102,7 +103,7 @@ class PdfManager ():
                 message = 'File "{}" already exist'.format (self.output_file)
                 raise ValueError(message)
     
-    def __verify_outputh_folder (self, folder): 
+    def __verify_output_folder (self, folder): 
         """
         Verify if output folder already exist. 
         If folder dosent exist, make it
@@ -128,7 +129,7 @@ class PdfManager ():
 
         self.__verify_extension_input_files (pdf=True, function_name = "merge")
 
-        self.__verify_outputh_file (merged_file, "merged_file", ".pdf")
+        self.__verify_output_file (merged_file, "merged_file", ".pdf")
 
         
         pdfWriter = PyPDF2.PdfFileWriter()
@@ -161,9 +162,9 @@ class PdfManager ():
         Split a specific list of pdf files inside specific folder
         """
 
-        self.__verify_extension_input_files (pdf=True, function_name = "merge")
+        self.__verify_extension_input_files (pdf=True, function_name = "split")
 
-        self.__verify_outputh_folder(output_folder)
+        self.__verify_output_folder(output_folder)
         
 
         # loop through all the pdf files
@@ -189,7 +190,7 @@ class PdfManager ():
                         file_path = os.path.join (output_folder, file_name)
 
                         # Verify if file exist
-                        self.__verify_outputh_file (file_path, "", ".pdf") 
+                        self.__verify_output_file (file_path, "", ".pdf") 
 
                         # Save file
                         pdfOutput = open (self.output_file, 'wb')
@@ -203,11 +204,14 @@ class PdfManager ():
         else: 
             logging.debug ("List of files empty.")
     
-    def pdf_to_jpg (self, output_folder, convert_base_name = "-img-"): 
+    def pdf_to_img (self, output_folder, convert_base_name = "-img-"): 
+        """
+        Convert each page from pdf file(s), to jpg image
+        """
  
-        self.__verify_extension_input_files (pdf=True, function_name = "merge")
+        self.__verify_extension_input_files (pdf=True, function_name = "pdf_to_img")
 
-        self.__verify_outputh_folder(output_folder)
+        self.__verify_output_folder(output_folder)
         
 
         # loop through all the pdf files
@@ -227,7 +231,7 @@ class PdfManager ():
                     file_path = os.path.join (output_folder, file_name)
 
                     # Verify if file exist
-                    self.__verify_outputh_file (file_path, "", ".jpg") 
+                    self.__verify_output_file (file_path, "", ".jpg") 
 
                     # Save file
                     images[i].save(file_path)
@@ -238,30 +242,70 @@ class PdfManager ():
             logging.debug ("List of files empty.")
 
 
+    def img_to_pdf (self, output_folder, merge_file=""): 
+        """
+        Convert list of images, to pdf files
+        """
+
+        self.__verify_extension_input_files (pdf=False, function_name = "img_to_pdf")
+
+        self.__verify_output_folder(output_folder)
         
 
+        # List of pdf files generated
+        pdf_generated_files = []
+
+        # loop through all the pdf files
+        if self.input_files: 
+            for currentFile in self.input_files: 
+                
+                logging.debug ("Converting {}... ".format (currentFile))
 
 
+                # Create the output file path
+                parent_file_name = os.path.basename (currentFile)
 
+                # Get the position of the start of the extension
+                ext_position = str(parent_file_name).rfind(".")
 
+                file_name = parent_file_name[:ext_position] + ".pdf"
+                file_path = os.path.join (output_folder, file_name)
 
+                # Verify if file exist
+                self.__verify_output_file (file_path, "", ".pdf") 
 
-    
-    # def merge_folder (self, folder):
-    #     """
-    #     Merge all files from a specific folder and save inside the output file
-    #     """
+                # opening image 
+                image = Image.open(currentFile) 
+                
+                # converting into chunks using img2pdf 
+                pdf_bytes = img2pdf.convert(image.filename) 
+                
+                # opening or creating pdf file 
+                file = open(file_path, "wb") 
+                
+                # writing pdf files with chunks 
+                file.write(pdf_bytes) 
+                
+                # closing image file 
+                image.close() 
+                
+                # closing pdf file 
+                file.close() 
 
-    #     # Verify is folder exist
-    #     if not os.path.isdir (folder): 
-    #         raise FileNotFoundError(folder)
-        
-    #     # Get files
-    #     for filename in os.listdir(folder):
-    #         if filename.endswith('.pdf'): 
-    #             self.pdfFiles.append(os.path.join(folder, filename))
-        
-    #     # Order files
-    #     self.pdfFiles.sort(key = str.lower)
+                # Add to list
+                pdf_generated_files.append (file_path)
 
-    #     self.__make_merge()
+        else: 
+            logging.debug ("List of files empty.")
+
+        # Merge all generaterd files
+        if merge_file: 
+            if pdf_generated_files: 
+
+                # Merge
+                sub_pdf_manager = PdfManager (pdf_generated_files, self.replace, self.debug)
+                sub_pdf_manager.merge (merge_file)
+
+                # Delate individual files
+                for pdf_file in pdf_generated_files: 
+                    send2trash.send2trash (pdf_file)
