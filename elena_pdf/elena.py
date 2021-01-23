@@ -1,6 +1,6 @@
 #! python3
 
-import PyPDF2, os, sys, logging
+import PyPDF2, os, sys, logging, pdf2image
 
 class PdfManager (): 
     """
@@ -82,7 +82,7 @@ class PdfManager ():
         # verify path and make file name
         if os.path.isdir (file): 
             self.output_file = os.path.join(file, default_name + extension)
-        elif file.endswith(".pdf"):
+        elif file.endswith(extension):
             self.output_file = file
         else:
             parent_path = os.path.dirname(file) 
@@ -97,7 +97,7 @@ class PdfManager ():
         # Verify replace outputh file
         if os.path.isfile (self.output_file):
             if self.replace: 
-                logging.debug ("Replacing file")
+                logging.debug ('Replacing file "{}"'.format (os.path.basename (self.output_file)))
             else: 
                 message = 'File "{}" already exist'.format (self.output_file)
                 raise ValueError(message)
@@ -113,7 +113,7 @@ class PdfManager ():
             message = 'Error output folder. ({})\nThe output folder need to be a folder, not a file.'.format (folder)
             raise ValueError(message)
         elif folder.strip() == "":
-            message = 'The functions need a destination folder.'
+            message = 'The function need a destination folder.'
             raise ValueError(message)
         elif not os.path.isdir (folder): 
             message = 'Output folder ({}), doesn\'t exist.'.format (folder)
@@ -196,15 +196,49 @@ class PdfManager ():
                         pdfWriter.write(pdfOutput)
                         pdfOutput.close()
 
-                        logging.debug ('Done. File "{}" generated.'.format (file_path))
+                        logging.debug ('File "{}" generated.'.format (file_path))
                 else: 
                     logging.debug ('File "{}" has not pages.'.format (file_name))
 
         else: 
             logging.debug ("List of files empty.")
     
-    def pdf_jpg (self):
-        pass
+    def pdf_to_jpg (self, output_folder, convert_base_name = "-img-"): 
+ 
+        self.__verify_extension_input_files (pdf=True, function_name = "merge")
+
+        self.__verify_outputh_folder(output_folder)
+        
+
+        # loop through all the pdf files
+        if self.input_files: 
+            for currentFile in self.input_files: 
+                
+                logging.debug ("Converting {}... ".format (currentFile))
+
+                # Store Pdf with convert_from_path function
+                images = pdf2image.convert_from_path(currentFile)
+                
+                for i in range(len(images)):
+                
+                     # Create the output file path
+                    parent_file_name = os.path.basename (currentFile)
+                    file_name = parent_file_name[:-4] + "{}{}.{}".format (convert_base_name, str(i + 1), "jpg")
+                    file_path = os.path.join (output_folder, file_name)
+
+                    # Verify if file exist
+                    self.__verify_outputh_file (file_path, "", ".jpg") 
+
+                    # Save file
+                    images[i].save(file_path)
+
+                    logging.debug ('File "{}" generated.'.format (file_path))
+
+        else: 
+            logging.debug ("List of files empty.")
+
+
+        
 
 
 
