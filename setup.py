@@ -8,21 +8,21 @@ with open(os.path.join(this_directory, 'README.md')) as f:
     long_description = f.read()
 
 setup (
-	name = "merge_pdf",
-	version = "1.0.1", 
-	description = "Merge by name, all pdfs in the current folder, or specific list of files, into a single pdf file",
+	name = "elena_pdf",
+	version = "1.1.0", 
+	description = "Manage pdf files: merge, split, convert to image and convert images to pdf",
 	long_description = long_description,
 	long_description_content_type = "text/markdown",
 	author = "Dari Developer",
 	author_email = "hernandezdarifrancisco@gmail.com",
 	license = "MIT",
-	keywords = "pdf, merge, merge pdf, pdf files, manage pdf",
+	keywords = "elena, elena pdf, pdf, merge, split, convert to image, convert to pdfo, merge pdf, split pdf, convert pdf to image, convert image to pdf, pdf files, manage pdf",
 	project_urls = {
-		"Documentation": "https://github.com/DariHernandez/merge_pdf/blob/master/README.md",
+		"Documentation": "https://github.com/DariHernandez/elena_pdf/blob/master/README.md",
 		"Funding": "https://www.paypal.com/paypalme/FranciscoDari",
-		"Source": "https://github.com/DariHernandez/merge_pdf"
+		"Source": "https://github.com/DariHernandez/elena_pdf"
 		},
-	packages = find_packages(include=["merge_pdf", "merge_pdf.*"]),
-	install_requires = ["pyperclip", "PyPDF2"],
+	packages = find_packages(include=["elena_pdf", "elena_pdf.*"]),
+	install_requires = ["PyPDF2", "pdf2image", "img2pdf", "Send2Trash", "Pillow"],
 	python_requires = ">=3.7"
 )
