@@ -1,45 +1,141 @@
-# Merge pdf
-Merge by name, all pdfs in the current folder, or specific list of files, into a single pdf file
+# Elena Pdf
+Manage pdf files fast and easy
+Merge, split, convert pdf to image and convert images to pdf
 
 # Install 
 ```bash
-$ pip install merge-pdf
+$ pip install elena-pdf
 ```
 
-## How to use
+# How to use
+
+## Import module
 ``` python
-# Import module
-from merge_pdf import merge
+from elena_pdf import elena
+```
 
-# Path of the output pdf file
-output_file = "c:\\output\\merged_files.pdf"
+## Merge pdf files
 
-# Folder of the output file
-output_file_folder = "c:\\output"
-
-# Folder within have pdf files
-folder_files_pdf = "c:\\pdf_files"
-
-# List of specific pdf files
-files_list = [
-    "c:\\pdf_files\\01.pdf",
-    "c:\\pdf_files\\02.pdf",
-    "c:\\pdf_files\\03.pdf"
+List of files to merge
+``` python
+files_to_merge = [
+    "c:\\my_folder\\01.pdf",
+    "c:\\my_folder\\02.pdf",
+    "c:\\my_folder\\03.pdf"
 ]
+```
 
-# Merge the files inside of specific folder and save in output file
-merge.Merge (output_file).merge_folder (folder_files_pdf)
+Instance of the class
+``` python
+my_elena = elena.PdfManager (files_to_merge, replace=True, debug=True)
 
-# Use a folder to generate the output file with the default name in this folder
-merge.Merge (output_file_folder).merge_folder (folder_files_pdf)
+# replace: replace destination file if exist
+# debug: print program status during execution
+```
 
-# Merge specific list of files
-merge.Merge (output_file, replace= True).merge_file_list (files_list)
+Merge file and save in specific output file
+``` python
+my_elena.merge("c:\\output_folder\\output_file.pdf")
+```
 
-# Merge files and allow replace existing file output
-merge.Merge (output_file, replace=True).merge_folder (folder_files_pdf)
+Merge file and save in specific folder, with default output file name
+``` python
+my_elena.merge("c:\\output_folder")
+```
 
-# Merge files and print the status of the program
-merge.Merge (output_file, debug=True).merge_folder (folder_files_pdf)
+## Split pdf files
 
+List of files to merge
+``` python
+files_to_split = [
+    "c:\\my_folder\\01.pdf",
+    "c:\\my_folder\\02.pdf",
+    "c:\\my_folder\\03.pdf"
+]
+```
+
+Instance of the class
+``` python
+my_elena = elena.PdfManager (files_to_split, replace=True, debug=True)
+
+# replace: replace destination file if exist
+# debug: print program status during execution
+```
+
+Split files with default base name
+``` python
+my_elena.split("c:\\output_folder")
+```
+
+Split files with specific base name
+``` python
+my_elena.split("c:\\output_folder", " page ")
+```
+
+Split files with empty base name
+``` python
+my_elena.split("c:\\output_folder", "")
+```
+
+## Convert pdf to image
+
+List of files to merge
+``` python
+files_to_convert = [
+    "c:\\my_folder\\01.pdf",
+    "c:\\my_folder\\02.pdf",
+    "c:\\my_folder\\03.pdf"
+]
+```
+
+Instance of the class
+``` python
+my_elena = elena.PdfManager (files_to_convert, replace=True, debug=True)
+
+# replace: replace destination file if exist
+# debug: print program status during execution
+```
+
+Convert files to images with default base name
+``` python
+my_elena.pdf_to_img("c:\\output_folder")
+```
+
+Convert files to images specific base name
+``` python
+my_elena.pdf_to_img("c:\\output_folder", " page ")
+```
+
+Convert files to images with empty base name
+``` python
+my_elena.pdf_to_img("c:\\output_folder", "")
+```
+
+## Convert image to pdf
+
+List of files to merge
+``` python
+files_to_convert = [
+    "c:\\my_folder\\01.jpg",
+    "c:\\my_folder\\02.jpg",
+    "c:\\my_folder\\03.jpg"
+]
+```
+
+Instance of the class
+``` python
+my_elena = elena.PdfManager (files_to_convert, replace=True, debug=True)
+
+# replace: replace destination file if exist
+# debug: print program status during execution
+```
+
+Convert imges to pdf files, and generate one file for image
+``` python
+my_elena.pdf_to_img("c:\\output_folder")
+```
+
+Convert imges to pdf files, and merge in one oputput file
+``` python
+my_elena.pdf_to_img("c:\\output_folder", "c:\\output_folder\\images_converted.pdf")
 ```
