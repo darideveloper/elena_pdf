@@ -90,6 +90,7 @@ my_elena.split("c:\\output_folder", "")
 ```
 
 ## Convert pdf to image
+Output images extension: `jpg`
 
 List of files to merge
 ``` python
@@ -124,6 +125,7 @@ my_elena.pdf_to_img("c:\\output_folder", "")
 ```
 
 ## Convert image to pdf
+Input images extension: `jpg, eps, tga, webp, gif`
 
 List of files to merge
 ``` python

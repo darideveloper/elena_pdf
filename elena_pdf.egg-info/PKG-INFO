@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: elena-pdf
-Version: 1.1.4
+Version: 1.1.5
 Summary: Manage pdf files: merge, split, convert to image and convert images to pdf
 Home-page: UNKNOWN
 Author: Dari Developer
@@ -101,6 +101,7 @@ Description: # Elena Pdf
         ```
         
         ## Convert pdf to image
+        Output images extension: `jpg`
         
         List of files to merge
         ``` python
@@ -135,6 +136,7 @@ Description: # Elena Pdf
         ```
         
         ## Convert image to pdf
+        Input images extension: `jpg, eps, tga, webp, gif`
         
         List of files to merge
         ``` python

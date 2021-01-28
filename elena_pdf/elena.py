@@ -59,7 +59,7 @@ class PdfManager ():
         if pdf: 
             list_extensions = ["pdf"]
         else: 
-            list_extensions = ["jpg"]
+            list_extensions = ["jpg", "eps", "tga", "webp", "gif"]
 
 
         # Loop for each file
