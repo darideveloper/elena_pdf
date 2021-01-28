@@ -335,4 +335,11 @@ class PdfManager ():
 
                 # Delate individual files
                 for pdf_file in pdf_generated_files: 
-                    send2trash.send2trash (pdf_file)
+                    
+                    pdf_file_path = os.path.abspath (pdf_file)
+
+                    # Try to delete files
+                    try: 
+                        send2trash.send2trash (pdf_file_path)
+                    except: 
+                        pass
