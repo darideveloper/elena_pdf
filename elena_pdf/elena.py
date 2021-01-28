@@ -84,32 +84,26 @@ class PdfManager ():
         if os.path.isdir (file): 
             # Make the default file in the specific foder
             self.output_file = os.path.join(file, default_name + extension)
-        elif file.endswith(extension):
-            # Verify if the parent folder exist
-            parent_path = os.path.dirname(file) 
-            if os.path.isdir (parent_path): 
-                # Make an specific file in specific folder
-                self.output_file = file
-            else: 
-                message = 'Parent folder "{}" doesn\'t exist'.format (parent_path)
-                raise ValueError(message)
-        else:
+        else: 
             # Verify the path of the file          
             path_file = os.path.split (file)
 
-            if path_file[0] == "": 
-                # make file in current directory
-                self.output_file = file + extension
-            else: 
+
+            if path_file[0] != "":
+
                 # Verify if the parent folder exist
                 parent_path = os.path.dirname(file) 
-                if os.path.isdir (parent_path): 
-                    # Make the file in the parent folder 
-                    self.output_file = file + extension
-                else: 
+                if not os.path.isdir (parent_path): 
+
+                    # Raise error
                     message = 'Parent folder "{}" doesn\'t exist'.format (parent_path)
                     raise ValueError(message)
 
+            # Make an specific file in specific folder
+            if file.endswith(extension): 
+                self.output_file = file
+            else: 
+                self.output_file = file + extension           
 
 
         # Verify replace outputh file
@@ -335,7 +329,7 @@ class PdfManager ():
 
                 # Delate individual files
                 for pdf_file in pdf_generated_files: 
-                    
+
                     pdf_file_path = os.path.abspath (pdf_file)
 
                     # Try to delete files
