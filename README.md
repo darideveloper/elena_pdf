@@ -40,158 +40,158 @@ Project type: **personal's project**
 
 # Install
 
-\\`\\`\\`bash\r
-$ pip install elena-pdf\r
-\\`\\`\\`\r
-\r
-## Windows\r
-\r
-Installing last version of Microsoft Visual [C++ Redistributable](https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0)\r
-\r
-\r
-## Linux\r
-\r
-Most distros ship with \\`pdftoppm\\` and \\`pdftocairo\\`. If they are not installed, refer to your package manager to install \\`poppler-utils\\`\r
-\r
-## Mac\r
-\r
+```bash
+$ pip install elena-pdf
+```
+
+## Windows
+
+Installing last version of Microsoft Visual [C++ Redistributable](https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0)
+
+
+## Linux
+
+Most distros ship with `pdftoppm` and `pdftocairo`. If they are not installed, refer to your package manager to install `poppler-utils`
+
+## Mac
+
 Mac users will have to install [poppler for Mac](http://macappstore.org/poppler/).
 
 # Run
 
-## Merge pdf files\r
-\r
-List of files to merge\r
-\\`\\`\\` python\r
-files_to_merge = [\r
-    \\\"c:\\\\my_folder\\\\01.pdf\\\",\r
-    \\\"c:\\\\my_folder\\\\02.pdf\\\",\r
-    \\\"c:\\\\my_folder\\\\03.pdf\\\"\r
-]\r
-\\`\\`\\`\r
-\r
-Instance of the class\r
-\\`\\`\\` python\r
-my_elena = elena.PdfManager (files_to_merge, replace=True, debug=True)\r
-\r
-# replace: replace destination file if exist\r
-# debug: print program status during execution\r
-\\`\\`\\`\r
-\r
-Merge file and save in specific output file\r
-\\`\\`\\` python\r
-my_elena.merge(\\\"c:\\\\output_folder\\\\output_file.pdf\\\")\r
-\\`\\`\\`\r
-\r
-Merge file and save in specific folder, with default output file name\r
-\\`\\`\\` python\r
-my_elena.merge(\\\"c:\\\\output_folder\\\")\r
-\\`\\`\\`\r
-\r
-## Split pdf files\r
-\r
-List of files to merge\r
-\\`\\`\\` python\r
-files_to_split = [\r
-    \\\"c:\\\\my_folder\\\\01.pdf\\\",\r
-    \\\"c:\\\\my_folder\\\\02.pdf\\\",\r
-    \\\"c:\\\\my_folder\\\\03.pdf\\\"\r
-]\r
-\\`\\`\\`\r
-\r
-Instance of the class\r
-\\`\\`\\` python\r
-my_elena = elena.PdfManager (files_to_split, replace=True, debug=True)\r
-\r
-# replace: replace destination file if exist\r
-# debug: print program status during execution\r
-\\`\\`\\`\r
-\r
-Split files with default base name\r
-\\`\\`\\` python\r
-my_elena.split(\\\"c:\\\\output_folder\\\")\r
-\\`\\`\\`\r
-\r
-Split files with specific base name\r
-\\`\\`\\` python\r
-my_elena.split(\\\"c:\\\\output_folder\\\", \\\" page \\\")\r
-\\`\\`\\`\r
-\r
-Split files with empty base name\r
-\\`\\`\\` python\r
-my_elena.split(\\\"c:\\\\output_folder\\\", \\\"\\\")\r
-\\`\\`\\`\r
-\r
-## Convert pdf to image\r
-Output images extension: \\`jpg\\`\r
-\r
-List of files to merge\r
-\\`\\`\\` python\r
-files_to_convert = [\r
-    \\\"c:\\\\my_folder\\\\01.pdf\\\",\r
-    \\\"c:\\\\my_folder\\\\02.pdf\\\",\r
-    \\\"c:\\\\my_folder\\\\03.pdf\\\"\r
-]\r
-\\`\\`\\`\r
-\r
-Instance of the class\r
-\\`\\`\\` python\r
-my_elena = elena.PdfManager (files_to_convert, replace=True, debug=True)\r
-\r
-# replace: replace destination file if exist\r
-# debug: print program status during execution\r
-\\`\\`\\`\r
-\r
-Convert files to images with default base name\r
-\\`\\`\\` python\r
-my_elena.pdf_to_img(\\\"c:\\\\output_folder\\\")\r
-\\`\\`\\`\r
-\r
-Convert files to images specific base name\r
-\\`\\`\\` python\r
-my_elena.pdf_to_img(\\\"c:\\\\output_folder\\\", \\\" page \\\")\r
-\\`\\`\\`\r
-\r
-Convert files to images with empty base name\r
-\\`\\`\\` python\r
-my_elena.pdf_to_img(\\\"c:\\\\output_folder\\\", \\\"\\\")\r
-\\`\\`\\`\r
-\r
-## Convert image to pdf\r
-Input images extension: \\`jpg, eps, tga, webp, gif\\`\r
-\r
-List of files to merge\r
-\\`\\`\\` python\r
-files_to_convert = [\r
-    \\\"c:\\\\my_folder\\\\01.jpg\\\",\r
-    \\\"c:\\\\my_folder\\\\02.jpg\\\",\r
-    \\\"c:\\\\my_folder\\\\03.jpg\\\"\r
-]\r
-\\`\\`\\`\r
-\r
-Instance of the class\r
-\\`\\`\\` python\r
-my_elena = elena.PdfManager (files_to_convert, replace=True, debug=True)\r
-\r
-# replace: replace destination file if exist\r
-# debug: print program status during execution\r
-\\`\\`\\`\r
-\r
-Convert imges to pdf files, and generate one file for image\r
-\\`\\`\\` python\r
-my_elena.pdf_to_img(\\\"c:\\\\output_folder\\\")\r
-\\`\\`\\`\r
-\r
-Convert imges to pdf files, and merge in one oputput file\r
-\\`\\`\\` python\r
-my_elena.pdf_to_img(\\\"c:\\\\output_folder\\\", \\\"c:\\\\output_folder\\\\images_converted.pdf\\\")\r
-\\`\\`\\`
+## Merge pdf files
+
+List of files to merge
+``` python
+files_to_merge = [
+    "c:my_folder01.pdf",
+    "c:my_folder02.pdf",
+    "c:my_folder03.pdf"
+]
+```
+
+Instance of the class
+``` python
+my_elena = elena.PdfManager (files_to_merge, replace=True, debug=True)
+
+# replace: replace destination file if exist
+# debug: print program status during execution
+```
+
+Merge file and save in specific output file
+``` python
+my_elena.merge("c:output_folderoutput_file.pdf")
+```
+
+Merge file and save in specific folder, with default output file name
+``` python
+my_elena.merge("c:output_folder")
+```
+
+## Split pdf files
+
+List of files to merge
+``` python
+files_to_split = [
+    "c:my_folder01.pdf",
+    "c:my_folder02.pdf",
+    "c:my_folder03.pdf"
+]
+```
+
+Instance of the class
+``` python
+my_elena = elena.PdfManager (files_to_split, replace=True, debug=True)
+
+# replace: replace destination file if exist
+# debug: print program status during execution
+```
+
+Split files with default base name
+``` python
+my_elena.split("c:output_folder")
+```
+
+Split files with specific base name
+``` python
+my_elena.split("c:output_folder", " page ")
+```
+
+Split files with empty base name
+``` python
+my_elena.split("c:output_folder", "")
+```
+
+## Convert pdf to image
+Output images extension: `jpg`
+
+List of files to merge
+``` python
+files_to_convert = [
+    "c:my_folder01.pdf",
+    "c:my_folder02.pdf",
+    "c:my_folder03.pdf"
+]
+```
+
+Instance of the class
+``` python
+my_elena = elena.PdfManager (files_to_convert, replace=True, debug=True)
+
+# replace: replace destination file if exist
+# debug: print program status during execution
+```
+
+Convert files to images with default base name
+``` python
+my_elena.pdf_to_img("c:output_folder")
+```
+
+Convert files to images specific base name
+``` python
+my_elena.pdf_to_img("c:output_folder", " page ")
+```
+
+Convert files to images with empty base name
+``` python
+my_elena.pdf_to_img("c:output_folder", "")
+```
+
+## Convert image to pdf
+Input images extension: `jpg, eps, tga, webp, gif`
+
+List of files to merge
+``` python
+files_to_convert = [
+    "c:my_folder01.jpg",
+    "c:my_folder02.jpg",
+    "c:my_folder03.jpg"
+]
+```
+
+Instance of the class
+``` python
+my_elena = elena.PdfManager (files_to_convert, replace=True, debug=True)
+
+# replace: replace destination file if exist
+# debug: print program status during execution
+```
+
+Convert imges to pdf files, and generate one file for image
+``` python
+my_elena.pdf_to_img("c:output_folder")
+```
+
+Convert imges to pdf files, and merge in one oputput file
+``` python
+my_elena.pdf_to_img("c:output_folder", "c:output_folderimages_converted.pdf")
+```
 
 # Roadmap
 
-* [X] Merge pdf files\r
-* [X] Split pdf files\r
-* [X] Convert pdf to image\r
+* [X] Merge pdf files
+* [X] Split pdf files
+* [X] Convert pdf to image
 * [X] Convert image to pdf
 
 
